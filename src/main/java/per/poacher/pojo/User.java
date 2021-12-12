@@ -1,9 +1,12 @@
 package per.poacher.pojo;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author poacher
  * @create 2021-04-29-15:32
  */
+@Component
 public class User {
 
     private int id;

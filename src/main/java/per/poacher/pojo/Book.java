@@ -1,25 +1,28 @@
 package per.poacher.pojo;
 
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 
 /**
  * @author poacher
  * @create 2021-05-02-15:16
  */
+@Component
 public class Book {
 
-    private int id;
+    private Integer id;
     private String name;
     private String author;
     private BigDecimal price;
-    private int sales;
-    private int stock;
+    private Integer sales;
+    private Integer stock;
     private String imgPath = "static/img/default.jpg";
 
     public Book() {
     }
 
-    public Book(int id, String name, String author, BigDecimal price, int sales, int stock, String imgPath) {
+    public Book(Integer id, String name, String author, BigDecimal price, Integer sales, Integer stock, String imgPath) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -30,11 +33,11 @@ public class Book {
             this.imgPath = imgPath;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -62,19 +65,19 @@ public class Book {
         this.price = price;
     }
 
-    public int getSales() {
+    public Integer getSales() {
         return sales;
     }
 
-    public void setSales(int sales) {
+    public void setSales(Integer sales) {
         this.sales = sales;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 

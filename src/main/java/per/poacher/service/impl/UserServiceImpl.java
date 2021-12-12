@@ -1,34 +1,41 @@
 package per.poacher.service.impl;
 
-import per.poacher.dao.UserDao;
-import per.poacher.dao.impl.UserDaoImpl;
+import org.springframework.stereotype.Service;
+import per.poacher.mapper.UserMapper;
 import per.poacher.pojo.User;
 import per.poacher.service.UserService;
-import per.poacher.utils.JdbcUtils;
-
-import java.sql.Connection;
 
 /**
  * @author poacher
  * @create 2021-04-29-19:58
  */
+@Service
 public class UserServiceImpl implements UserService {
 
-    private UserDao userDao = new UserDaoImpl();
-    public void regist(Connection conn, User user) {
-        userDao.regist(conn, user);
+    private UserMapper userMapper;
+
+    public void setUserMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
-    public User login(Connection conn, User user) {
-        User login = userDao.login(conn, user.getUsername(), user.getPassword());
+    @Override
+    public int regist(User user) {
+        return userMapper.regist(user);
+    }
+
+    @Override
+    public User login(User user) {
+        User login = userMapper.login(user);
         return login;
     }
 
-    public boolean checkName(Connection conn, String username) {
-        if (userDao.registName(conn, username) != null) {
-            return true;
+    @Override
+    public boolean checkName(String username) {
+        User user = userMapper.registName(username);
+        if (user == null) {
+            return false;
         }
-        return false;
+        return true;
     }
 
 }

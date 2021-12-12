@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+<!--    spring-dao-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource">
+        <property name="driverClassName" value="${jdbc.drive}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            helperDialect=mysql
+                            reasonable=true
+                            supportMethodsArguments=true
+                            params=count=countSql
+                            autoRuntimeDialect=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" id="scannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="per.poacher.mapper"/>
+    </bean>
+
+<!--    spring-service-->
+    <context:component-scan base-package="per.poacher"/>
+
+    <bean class="per.poacher.service.impl.UserServiceImpl" id="userService">
+        <property name="userMapper" ref="userMapper"/>
+    </bean>
+    <bean class="per.poacher.service.impl.BookServiceImpl" id="bookService">
+        <property name="bookMapper" ref="bookMapper"/>
+    </bean>
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+<!--    spring-controller-->
+    <mvc:annotation-driven/>
+
+    <mvc:default-servlet-handler/>
+
+    <mvc:view-controller path="/" view-name="index"/>
+    <mvc:view-controller path="/index" view-name="index"/>
+    <mvc:view-controller path="/pages/login" view-name="login"/>
+    <mvc:view-controller path="/pages/regist" view-name="regist"/>
+    <mvc:view-controller path="/pages/order" view-name="order"/>
+    <mvc:view-controller path="/pages/manager" view-name="manager"/>
+    <mvc:view-controller path="/pages/order_manager" view-name="order_manager"/>
+    <mvc:view-controller path="/pages/book_edit" view-name="book_edit"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>
